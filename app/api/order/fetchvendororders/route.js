@@ -1,17 +1,17 @@
 import Vendor from "@/models/Vendor";
 import connectDB from "@/lib/mongoose";
 import { NextResponse } from "next/server";
-import { cookies, headers } from "next/headers";
 
 import jwt from "jsonwebtoken";
+import FoodOrder from "@/models/FoodOrder";
 
-export async function GET() {
+export async function POST(req) {
   try {
-    console.log("hjh");
-    const vendor_token = cookies().get("vendor_token").value;
-    console.log("ven", vendor_token);
+    const { vendor_token } = await req.json();
+
     const data = jwt.verify(vendor_token, process.env.JWT_SECRET);
     const number = data.number;
+
     // Connecting to database
     await connectDB();
 
@@ -19,10 +19,12 @@ export async function GET() {
     let vendor = await Vendor.findOne({ number });
 
     if (vendor) {
+      const orders = await FoodOrder.find({ vendorId: vendor._id });
+
       return NextResponse.json({
         success: true,
-        message: "Vendor fetched successfully",
-        vendor,
+        message: "Orders fetched successfully",
+        orders,
       });
     } else {
       return NextResponse.json({
@@ -33,7 +35,7 @@ export async function GET() {
   } catch (error) {
     return NextResponse.json({
       success: false,
-      error: "An error occurred while fetching the Vendor : " + error,
+      error: "An error occurred while fetching the vendor : " + error,
     });
   }
 }

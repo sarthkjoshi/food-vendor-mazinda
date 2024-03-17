@@ -41,7 +41,7 @@ const VendorOrdersPage = () => {
       const response = await axios.post(`/api/order/fetchvendororders`, {
         vendor_token: vendorToken,
       });
-
+      console.log("helllo", response);
       const ordersWithUsers = await Promise.all(
         response.data.orders.map(async (order) => {
           const userInfo = await fetchUser(order.userId);

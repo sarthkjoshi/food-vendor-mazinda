@@ -3,8 +3,6 @@
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
-import Cookies from "js-cookie";
-const jwt = require("jsonwebtoken");
 
 const RestaurantMenu = () => {
   const [categories, setCategories] = useState([]);
@@ -100,12 +98,18 @@ const RestaurantMenu = () => {
   };
 
   const handleSaveClick = async () => {
-    const vendor_token = Cookies.get("vendor_token");
     try {
-      const data = jwt.verify(vendor_token, "this is jwt secret");
-      const number = data.number;
+      const vendorResponse = await fetch("/api/vendor/me", {
+        cache: "no-cache",
+      });
+      const data = await vendorResponse.json();
+      const vendorToken = data.decoded;
+      const number = vendorToken.number;
 
-      const response = await axios.put(`/api/vendor/update/menu`, { number, menu: products });
+      const response = await axios.put(`/api/vendor/update/menu`, {
+        number,
+        menu: products,
+      });
 
       const json = await response.data;
 
@@ -139,14 +143,16 @@ const RestaurantMenu = () => {
 
   useEffect(() => {
     const fetchMenu = async () => {
-      const vendor_token = Cookies.get("vendor_token");
-      const data = jwt.verify(vendor_token, "this is jwt secret");
-      const number = data.number;
-  
+      const vendorResponse = await fetch("/api/vendor/me", {
+        cache: "no-cache",
+      });
+      const data = await vendorResponse.json();
+      const vendorToken = data.decoded;
+      const number = vendorToken.number;
       try {
         const response = await axios.post(`/api/vendor/fetchmenu`, { number });
         const json = response.data;
-  
+
         if (json.success) {
           setCategories(Object.keys(json.menu)); // Extract categories
           setProducts(json.menu);
@@ -158,7 +164,7 @@ const RestaurantMenu = () => {
         console.error("An error occurred:", error);
       }
     };
-  
+
     fetchMenu();
   }, []);
 
