@@ -1,9 +1,9 @@
-import Order from "@/models/Order";
 import User from "@/models/User";
 import connectDB from "@/lib/mongoose";
 import { NextResponse } from "next/server";
 
 import jwt from "jsonwebtoken";
+import FoodOrder from "@/models/FoodOrder";
 
 export async function POST(req) {
   try {
@@ -18,7 +18,7 @@ export async function POST(req) {
     let user = await User.findOne({ email });
 
     if (user) {
-      const orders = await Order.find({ userId: user._id });
+      const orders = await FoodOrder.find({ userId: user._id });
       return NextResponse.json({
         success: true,
         message: "Orders fetched successfully",

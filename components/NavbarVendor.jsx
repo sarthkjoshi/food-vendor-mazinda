@@ -17,7 +17,7 @@ const NavbarVendor = () => {
     <>
       <nav className="border-gray-200 p-5 shadow-md">
         <div className="container mx-auto flex flex-wrap items-center justify-between">
-          <Link href="/vendor" className="flex">
+          <Link href="/" className="flex">
             <Image src={LogoMain} width={100} alt="Citikartt" />
           </Link>
 

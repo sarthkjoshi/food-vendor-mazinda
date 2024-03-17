@@ -1,12 +1,12 @@
-import Order from "@/models/Order";
 import connectDB from "@/lib/mongoose";
 import { NextResponse } from "next/server";
+import FoodOrder from "@/models/FoodOrder";
 
 export async function POST() {
   try {
     // Connecting to database
     await connectDB();
-    const orders = await Order.find();
+    const orders = await FoodOrder.find();
     return NextResponse.json({
       success: true,
       message: "Orders fetched successfully",

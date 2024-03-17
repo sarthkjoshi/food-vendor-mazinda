@@ -2,7 +2,9 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
-import jwt from "jsonwebtoken";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+
 import OvalLoader from "@/components/OvalLoader";
 import axios from "axios";
 
@@ -82,12 +84,12 @@ const Menu = () => {
       <div className="flex justify-between">
         <h2 className="text-2xl mb-4 text-center">Menu</h2>
 
-        <button
-          onClick={handleToggle}
-          className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md"
-        >
-          {storeOpen ? "Close Store" : "Open Store"}
-        </button>
+        <div className="flex items-center space-x-2">
+          <Switch checked={storeOpen} onCheckedChange={handleToggle} />
+          <Label htmlFor="open-mode">
+            {storeOpen ? "Store is open" : "Store is cloed"}
+          </Label>
+        </div>
       </div>
 
       <div className="font-bold text-2xl text-center my-4">{storeName}</div>

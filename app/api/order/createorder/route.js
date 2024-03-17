@@ -1,6 +1,6 @@
-import Order from "@/models/Order";
 import connectDB from "@/libs/mongoose";
 import { NextResponse } from "next/server";
+import FoodOrder from "@/models/FoodOrder";
 
 export async function POST(req) {
   try {
@@ -15,7 +15,8 @@ export async function POST(req) {
       paymentLink,
     } = await req.json();
     await connectDB();
-    const order = await Order.create({
+
+    const order = await FoodOrder.create({
       userId,
       vendorId,
       products,

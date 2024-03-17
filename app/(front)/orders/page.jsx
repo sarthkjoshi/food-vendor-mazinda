@@ -6,6 +6,7 @@ import QRCode from "qrcode"; // Import qrcode library
 import Cookies from "js-cookie";
 import useSWR from "swr";
 import axios from "axios";
+import Ready from "@/components/Ready";
 
 const VendorOrdersPage = () => {
   const [saveStatusLoading, setSaveStatusLoading] = useState(false);
@@ -41,7 +42,7 @@ const VendorOrdersPage = () => {
       const response = await axios.post(`/api/order/fetchvendororders`, {
         vendor_token: vendorToken,
       });
-      console.log("helllo", response);
+
       const ordersWithUsers = await Promise.all(
         response.data.orders.map(async (order) => {
           const userInfo = await fetchUser(order.userId);
@@ -125,6 +126,8 @@ const VendorOrdersPage = () => {
                   {order._id.slice(-4)}
                 </span>
               </h2>
+
+              <Ready id={order._id} />
             </div>
 
             <div className="flex items-center justify-between mt-2">
@@ -189,6 +192,9 @@ const VendorOrdersPage = () => {
                 </p>
                 <p className="text-gray-600 ml-4">
                   Phone Number: {order.address.phoneNumber}
+                </p>
+                <p className="text-gray-600">
+                  <strong>Store OTP: {order.vendorOTP}</strong>
                 </p>
                 <p className="text-gray-600">
                   <strong>Instructions:</strong> {order.address.instructions}
